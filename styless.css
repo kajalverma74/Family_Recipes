@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+
+
+
+*{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Open Sans', sans-serif;
+}
+
+body{
+   width: 100%;
+   min-height: 100vh;
+   background: #f8f8f8;
+}
+
+/* Basic styling for the header */
+header {
+    background-color: #333;
+    padding: 20px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Styling for the logo */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f1eeee;
+    margin-right: 30%;
+  
+}
+
+
+.logo span {
+    color: #e91e63;
+}
+
+/* Styling for the navigation */
+nav {
+    display: flex;
+}
+
+.nav-list {
+  list-style: none; 
+  display: flex;    
+  justify-content: space-between; 
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+    margin-left: 20px;
+    
+    
+}
+
+.nav-list li a {
+  text-decoration: none;
+  font-size: 20px;
+  color: #e8e7e7;
+  letter-spacing: 1.2px; 
+  line-height: 1.8;   
+  display: block;  
+  padding: 5px 10px;
+  border-radius: 5px;  
+}
+
+
+.nav-list li a:hover {
+    color: #e91e63;
+    /* font-size: large; */
+}
+
+/* Responsive design: hide the navigation on smaller screens */
+.menu-icon {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* For screens smaller than 768px */
+@media (max-width: 768px) {
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background-color: #f8f9fa;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-list li {
+        margin: 10px 0;
+    }
+
+    /* Show the menu icon */
+    .menu-icon {
+        display: block;
+    }
+
+    nav.active .nav-list {
+        display: flex;
+    }
+}
+
+.hero{
+   width: 100%;
+   height: 28rem;
+   background: url(Images/dinner-salad.jpg);
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   color: #fff;
+   text-align: center;
+   padding: 150px 0;
+   margin: 10px;
+}
+
+
+.recipes.row:after{
+  padding: 10px 0;
+}
+
+.recipes h1{
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  
+}
+.recipes h1 span{
+  color:  #e91e63;
+}
+
+.recipe-section{
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  column-gap: 10px;
+}
+
+.recipe-card{
+  background: #fff;
+  margin: 30px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0,0.1);
+}
+
+.recipe-card img{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+
+}
+
+.recipe-card h2{
+  font-size: 24px;
+  padding: 20px;
+}
+
+.recipe-card p{
+  font-size: 18px;
+  padding: 20px;
+  margin: auto;
+}
+
+.recipe-card a{
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: #333;
+  color: #fff;
+  padding: 15px 0;
+  cursor: pointer;
+}
+
+/* Footer Styles *
+ Importing Google font - Open Sans */
+
+
+
+ .footer {
+  background-color: #333;
+  color: #fff;
+  padding: 40px 0;
+  text-align: left;
+  font-family: Arial, sans-serif;
+  padding-left: 12px;
+  margin-top:12px;
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-col {
+  width: 22%;
+  margin-bottom: 20px;
+}
+
+.footer-col h4 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.footer-col h4::after {
+  content: '';
+  background-color: #e91e63;
+  height: 2px;
+  width: 50px;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+}
+
+.footer-col ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+  color: #e91e63;
+}
+
+.footer-col p {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.footer-col form {
+  margin-top: 10px;
+}
+
+.footer-col form input[type="text"] {
+  padding: 10px;
+  border: none;
+  width: 80%;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.footer-col form button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #e91e63;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.footer-col form button:hover {
+  background-color: #d81b60;
+}
+
+.icons {
+  margin-top: 20px;
+}
+
+.icons i {
+  color: #fff;
+  margin-right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icons i:hover {
+  color: #e91e63;
+}
+
+@media (max-width: 768px) {
+  .footer-col {
+      width: 45%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-col {
+      width: 100%;
+  }
+}
+
+#carousel {
+  margin-top: 20px;
+}
+
+.carousel-inner img {
+  width: 100%;
+  margin: auto;
+  min-height:200px;
+}
+
+.carousel-inner p {
+  font-size: 130%;
+}
+
+.carousel-caption {
+  background-color: #fff;
+  opacity: 0.6;
+  color: #000;
+}
+/* Hide the carousel text when the screen is less than 600 pixels wide */
+@media (max-width: 600px) {
+  .carousel-caption {
+    display: none;
+  }
+}
+
+footer {
+  background-color: #fbdcad;
+  padding: 0 0 40px;
+}
+
+#footer1, #footer2, #footer3 {
+  text-align: left;
+  padding: 0 0 0 90px;
+  color: #49130c;
+}
+
+.footer-links {
+  text-align: left;
+  padding: 10px 0 0 90px;
+  color: #000;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 50px;
+}
+
+
+

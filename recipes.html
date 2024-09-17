@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="recipe.css">
+    <title>Recipe App</title>
+    <style>
+        /* CSS for the search bar label */
+        label[for="search-box"] {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .recipe {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .delete-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            color: white;
+            background-color: red;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h1>Recipe App</h1>
+    </nav>
+
+    <div class="container">
+        <div id="search-section">
+            <h3>Recipes List</h3>
+            <label for="search-box">Search:</label>
+            <input type="text" id="search-box" placeholder="Search recipes...">
+            <button id="save-search-btn">Save List</button>
+        </div>
+
+        <div id="recipe-list"></div>
+        <div id="no-recipes">You have no recipes.</div>
+    </div>
+
+    <h3>Add Recipe</h3>
+
+    <form>
+        <label for="recipe-name">Name:</label>
+        <input type="text" id="recipe-name" required>
+        <br />
+
+        <label for="recipe-ingredients">Ingredients (comma separated):</label>
+        <textarea id="recipe-ingredients" rows="5" required></textarea>
+        <br />
+
+        <label for="recipe-method">Method:</label>
+        <textarea id="recipe-method" rows="5" required></textarea>
+        <br />
+
+        <button type="submit">Add Recipe</button>
+    </form>
+
+    <script>
+        const form = document.querySelector('form');
+        const recipeList = document.querySelector('#recipe-list');
+        const searchBox = document.getElementById('search-box');
+        const saveSearchBtn = document.getElementById('save-search-btn');
+        let recipes = [];
+
+        // Add recipe function
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const nameInput = document.querySelector('#recipe-name');
+            const ingrInput = document.querySelector('#recipe-ingredients');
+            const methodInput = document.querySelector('#recipe-method');
+            const name = nameInput.value.trim();
+            const ingredients = ingrInput.value.trim().split(',').map(i => i.trim());
+            const method = methodInput.value.trim();
+
+            if (name && ingredients.length > 0 && method) {
+                const newRecipe = { name, ingredients, method };
+                recipes.push(newRecipe);
+                displayRecipes(recipes); // Display updated recipes list
+            }
+
+            nameInput.value = '';
+            ingrInput.value = '';
+            methodInput.value = '';
+        }
+
+        // Display recipes function
+        function displayRecipes(recipeArray) {
+            recipeList.innerHTML = '';  // Clear the current recipe list
+            const noRecipes = document.getElementById('no-recipes');
+
+            if (recipeArray.length > 0) {
+                noRecipes.style.display = 'none';
+
+                recipeArray.forEach((recipe, index) => {
+                    const recipeDiv = document.createElement('div');
+                    recipeDiv.innerHTML = `
+                        <h3>${recipe.name}</h3>
+                        <p><strong>Ingredients:</strong></p>
+                        <ul>
+                            ${recipe.ingredients.map(ingr => `<li>${ingr}</li>`).join('')}
+                        </ul>
+                        <p><strong>Method:</strong></p>
+                        <p>${recipe.method}</p>
+                        <button class="delete-button" data-index="${index}">Delete</button>
+                    `;
+                    recipeDiv.classList.add('recipe');
+                    recipeList.appendChild(recipeDiv);
+                });
+            } else {
+                noRecipes.style.display = 'block';
+            }
+        }
+
+        // Delete recipe function
+        function handleDelete(event) {
+            if (event.target.classList.contains('delete-button')) {
+                const index = event.target.dataset.index;
+                recipes.splice(index, 1);
+                displayRecipes(recipes); // Update the display after deletion
+
+                // Clear search box to refresh the list
+                searchBox.value = '';
+            }
+        }
+
+        // Search function
+        function search(query) {
+            const filteredRecipes = recipes.filter(recipe => {
+                return recipe.name.toLowerCase().includes(query.toLowerCase());
+            });
+
+            // Clear the recipe list
+            recipeList.innerHTML = '';
+
+            // Loop through each filtered recipe
+            filteredRecipes.forEach(recipe => {
+                const recipeEl = document.createElement('div');
+                recipeEl.innerHTML = `
+                    <h3>${recipe.name}</h3>
+                    <p><strong>Ingredients:</strong></p>
+                    <ul>
+                        ${recipe.ingredients.map(ingr => `<li>${ingr}</li>`).join('')}
+                    </ul>
+                    <p><strong>Method:</strong></p>
+                    <p>${recipe.method}</p>
+                    <button class="delete-button" data-index="${recipes.indexOf(recipe)}">Delete</button>
+                `;
+                recipeEl.classList.add('recipe');  // Add consistent styling
+                recipeList.appendChild(recipeEl);
+            });
+        }
+
+        // Save search list function
+        function saveSearchList() {
+            const query = searchBox.value.trim();
+            const filteredRecipes = recipes.filter(recipe => recipe.name.toLowerCase().includes(query.toLowerCase()));
+
+            if (filteredRecipes.length > 0) {
+                const savedList = JSON.stringify(filteredRecipes);
+                localStorage.setItem('savedRecipes', savedList); // Store the filtered recipes in local storage
+                alert('Recipe list saved!');
+            } else {
+                alert('No recipes to save.');
+            }
+        }
+
+        // Add event listener for the form submission
+        form.addEventListener('submit', handleSubmit);
+
+        // Add event listener for delete buttons
+        recipeList.addEventListener('click', handleDelete);
+
+        // Add event listener for search box
+        searchBox.addEventListener('input', event => {
+            search(event.target.value);
+        });
+
+        // Add event listener for save search button
+        saveSearchBtn.addEventListener('click', saveSearchList);
+
+    </script>
+
+</body>
+
+</html>
