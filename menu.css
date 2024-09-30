@@ -14,7 +14,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ///////////..utility classes../////////// */
+
 
 .container {
     max-width: 1200px;
@@ -25,6 +25,10 @@ body {
 #showcase {
     height: 500px;
 }
+.logo span {
+    color: #e91e63;
+}
+
 
 .btn {
     display: inline-block;
@@ -48,10 +52,6 @@ body {
     transition: background 0.3s ease-in-out;
 }
 
-/* ............/navbar/............ *
-
-/* desktop mode............/// */
-
 .navbar input[type="checkbox"],
 .navbar .hamburger-lines {
     display: none;
@@ -59,11 +59,10 @@ body {
 
 .navbar {
     box-shadow: 37px -42px 10px 37px #aaa;
-    ;
     position: fixed;
     width: 100%;
-    background: #fff;
-    color: #000;
+    background: rgb(226, 226, 226);
+    color: black;
     height: 70px;
     display: flex;
     align-items: center;
@@ -75,6 +74,7 @@ body {
     justify-content: space-between;
     height: 64px;
     align-items: center;
+    
 }
 
 .menu-items {
@@ -87,6 +87,7 @@ body {
     margin-left: 1.5rem;
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
+    
 }
 
 .menu-items a {
@@ -94,6 +95,7 @@ body {
     color: #444;
     font-weight: 500;
     transition: color 0.3s ease-in-out;
+    
 }
 
 .menu-items a:hover {
@@ -349,142 +351,7 @@ body {
     font-weight: 700;
 }
 
-/* ........./ Testimonial /.......... */
 
-#testimonials {
-    padding: 5rem 0;
-    background-color: white;
-}
-
-.testimonial-title {
-    text-align: center;
-    font-size: 2.8rem;
-    color: black;
-    font-weight: 700;
-}
-
-.testimonial-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    column-gap: 20px;
-}
-
-.testimonial-box .checked {
-    color: #ff9529;
-}
-
-.testimonial-box .testimonial-text {
-    margin: 1rem 0;
-    color: #444;
-}
-
-.testimonial-box {
-    text-align: center;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.customer-photo img {
-    display: block;
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 50%;
-    margin: auto;
-}
-
-.customer-photo p {
-    padding-top: 20px;
-}
-
-/* ........ Contact Us........... */
-
-#contact {
-    padding: 5rem 0;
-    background: rgb(226, 226, 226);
-}
-
-.contact-container {
-    display: flex;
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.contact-img {
-    width: 50%;
-}
-
-.contact-img img {
-    display: block;
-    height: 420px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    width: 100%;
-    object-position: center;
-    object-fit: cover;
-}
-
-.form-container {
-    padding: 1rem;
-    width: 50%;
-    margin: auto;
-}
-
-.form-container input {
-    display: block;
-    width: 100%;
-    padding: 1rem 0;
-    box-shadow: none;
-    outline: none;
-    margin-bottom: 1rem;
-    color: #444;
-    font-weight: 500;
-    background: whitesmoke;
-    padding-left: 20px;
-    border: 1px solid;
-    border-radius: 10px;
-}
-
-.form-container textarea {
-    display: block;
-    width: 100%;
-    border: none;
-    display: block;
-    width: 100%;
-    padding: 1rem 0;
-    box-shadow: none;
-    outline: none;
-    margin-bottom: 1rem;
-    color: #444;
-    font-weight: 500;
-    background: whitesmoke;
-    padding-left: 20px;
-    border: 1px solid;
-    border-radius: 10px;
-    color: #444;
-    outline: none;
-    resize: none;
-}
-
-.form-container h2 {
-    font-size: 2.7rem;
-    color: black;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    margin-top: -1.2rem;
-}
-
-.form-container a {
-    font-size: 1.3rem;
-}
 
 #footer h2 {
     text-align: center;
@@ -495,7 +362,6 @@ body {
     background: white;
 }
 
-/* ......../ media query /.......... */
 
 @media (max-width: 768px) {
     .navbar {
@@ -542,7 +408,7 @@ body {
         height: 4px;
         width: 100%;
         border-radius: 10px;
-        background: #333;
+        background: #080707;
     }
 
     .navbar-container .hamburger-lines .line1 {
@@ -561,7 +427,7 @@ body {
 
     .navbar .menu-items {
         padding-top: 100px;
-        background: #fff;
+        background: #aca0a0;
         height: 100vh;
         max-width: 300px;
         transform: translate(-150%);
@@ -631,11 +497,6 @@ body {
         font-size: 1.6rem;
     }
 
-    .testimonial-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
     .food-menu-container img {
         margin: auto;
     }
@@ -649,69 +510,15 @@ body {
         width: 90%;
     }
 
-    .contact-container {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .contact-img {
-        width: 90%;
-        margin: 3rem auto;
-    }
-
     .logo {
         position: absolute;
         top: 16px;
         right: 15px;
         font-size: 2rem;
     }
-
-    .testimonial-container {
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 20px;
-    }
-
     .navbar .menu-items li {
         margin-bottom: 2.5rem;
         font-size: 1.8rem;
         font-weight: 500;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1200px) {
-    .img-container h3 {
-        font-size: 1.5rem;
-    }
-
-    .img-container .btn {
-        font-size: 0.7rem;
-    }
-
-    .testimonial-container {
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 20px;
-    }
-}
-
-@media (orientation: landscape) and (max-height: 500px) {
-    .showcase-area {
-        height: 50vmax;
-    }
-
-    .testimonial-container {
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 20px;
-    }
-}
-
-@media (orientation: landscape) and (max-width: 555px) {
-
-    .testimonial-container {
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 20px;
     }
 }

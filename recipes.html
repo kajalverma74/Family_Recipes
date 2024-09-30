@@ -1,196 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="recipe.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="recipe.css" />
     <title>Recipe App</title>
-    <style>
-        /* CSS for the search bar label */
-        label[for="search-box"] {
-            display: block;
-            margin-bottom: 10px;
-        }
+  </head>
 
-        .recipe {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .delete-button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            color: white;
-            background-color: red;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-    <nav>
-        <h1>Recipe App</h1>
-    </nav>
-
-    <div class="container">
-        <div id="search-section">
-            <h3>Recipes List</h3>
-            <label for="search-box">Search:</label>
-            <input type="text" id="search-box" placeholder="Search recipes...">
-            <button id="save-search-btn">Save List</button>
-        </div>
-
-        <div id="recipe-list"></div>
-        <div id="no-recipes">You have no recipes.</div>
-    </div>
-
-    <h3>Add Recipe</h3>
-
+  <body>
+    <h3 style="font-size: 30px; color: darkblue; text-align: center">
+      Add <span style="color: rgb(128, 0, 126); font-weight: bold">Recipe</span>
+    </h3>
     <form>
-        <label for="recipe-name">Name:</label>
-        <input type="text" id="recipe-name" required>
-        <br />
-
-        <label for="recipe-ingredients">Ingredients (comma separated):</label>
-        <textarea id="recipe-ingredients" rows="5" required></textarea>
-        <br />
-
-        <label for="recipe-method">Method:</label>
-        <textarea id="recipe-method" rows="5" required></textarea>
-        <br />
-
-        <button type="submit">Add Recipe</button>
+      <input type="text" id="recipe-name" placeholder="Recipe Name" />
+      <input
+        type="text"
+        id="recipe-ingredients"
+        placeholder="Ingredients (comma separated)"
+      />
+      <input type="text" id="recipe-method" placeholder="Method" />
+      <button type="submit">Add Recipe</button>
     </form>
 
+    <div>
+      <input type="text" id="search-box" placeholder="Search for recipes..." />
+      <button id="save-search-btn">Save Search</button>
+    </div>
+
+    <ul id="recipe-list"></ul>
+    <!-- List to display recipes -->
+    <ul id="saved-ingredients-list"></ul>
+    <!-- List to display saved ingredients -->
+
     <script>
-        const form = document.querySelector('form');
-        const recipeList = document.querySelector('#recipe-list');
-        const searchBox = document.getElementById('search-box');
-        const saveSearchBtn = document.getElementById('save-search-btn');
-        let recipes = [];
+      const form = document.querySelector("form");
+      const recipeList = document.querySelector("#recipe-list");
+      const searchBox = document.getElementById("search-box");
+      const saveSearchBtn = document.getElementById("save-search-btn");
+      const savedIngredientsList = document.getElementById(
+        "saved-ingredients-list"
+      ); // New list for ingredients
+      let isEditing = false; // Track if we're in edit mode
+      let editingIndex = null; // Track which recipe is being edited
+      let recipes = []; // Store all recipes fetched from MongoDB
 
-        // Add recipe function
-        function handleSubmit(event) {
-            event.preventDefault();
-
-            const nameInput = document.querySelector('#recipe-name');
-            const ingrInput = document.querySelector('#recipe-ingredients');
-            const methodInput = document.querySelector('#recipe-method');
-            const name = nameInput.value.trim();
-            const ingredients = ingrInput.value.trim().split(',').map(i => i.trim());
-            const method = methodInput.value.trim();
-
-            if (name && ingredients.length > 0 && method) {
-                const newRecipe = { name, ingredients, method };
-                recipes.push(newRecipe);
-                displayRecipes(recipes); // Display updated recipes list
-            }
-
-            nameInput.value = '';
-            ingrInput.value = '';
-            methodInput.value = '';
+      // Fetch recipes from the server
+      async function fetchRecipes() {
+        try {
+          const response = await fetch("http://localhost:5000/recipes");
+          const data = await response.json();
+          recipes = data; // Store recipes from the server
+          displayRecipes(recipes);
+        } catch (error) {
+          console.error("Error fetching recipes:", error);
         }
+      }
 
-        // Display recipes function
-        function displayRecipes(recipeArray) {
-            recipeList.innerHTML = '';  // Clear the current recipe list
-            const noRecipes = document.getElementById('no-recipes');
+      // Function to display recipes in the list
+      function displayRecipes(recipes) {
+        recipeList.innerHTML = ""; // Clear previous recipes
 
-            if (recipeArray.length > 0) {
-                noRecipes.style.display = 'none';
-
-                recipeArray.forEach((recipe, index) => {
-                    const recipeDiv = document.createElement('div');
-                    recipeDiv.innerHTML = `
-                        <h3>${recipe.name}</h3>
-                        <p><strong>Ingredients:</strong></p>
-                        <ul>
-                            ${recipe.ingredients.map(ingr => `<li>${ingr}</li>`).join('')}
-                        </ul>
-                        <p><strong>Method:</strong></p>
-                        <p>${recipe.method}</p>
-                        <button class="delete-button" data-index="${index}">Delete</button>
-                    `;
-                    recipeDiv.classList.add('recipe');
-                    recipeList.appendChild(recipeDiv);
-                });
-            } else {
-                noRecipes.style.display = 'block';
-            }
-        }
-
-        // Delete recipe function
-        function handleDelete(event) {
-            if (event.target.classList.contains('delete-button')) {
-                const index = event.target.dataset.index;
-                recipes.splice(index, 1);
-                displayRecipes(recipes); // Update the display after deletion
-
-                // Clear search box to refresh the list
-                searchBox.value = '';
-            }
-        }
-
-        // Search function
-        function search(query) {
-            const filteredRecipes = recipes.filter(recipe => {
-                return recipe.name.toLowerCase().includes(query.toLowerCase());
-            });
-
-            // Clear the recipe list
-            recipeList.innerHTML = '';
-
-            // Loop through each filtered recipe
-            filteredRecipes.forEach(recipe => {
-                const recipeEl = document.createElement('div');
-                recipeEl.innerHTML = `
-                    <h3>${recipe.name}</h3>
-                    <p><strong>Ingredients:</strong></p>
-                    <ul>
-                        ${recipe.ingredients.map(ingr => `<li>${ingr}</li>`).join('')}
-                    </ul>
-                    <p><strong>Method:</strong></p>
-                    <p>${recipe.method}</p>
-                    <button class="delete-button" data-index="${recipes.indexOf(recipe)}">Delete</button>
-                `;
-                recipeEl.classList.add('recipe');  // Add consistent styling
-                recipeList.appendChild(recipeEl);
-            });
-        }
-
-        // Save search list function
-        function saveSearchList() {
-            const query = searchBox.value.trim();
-            const filteredRecipes = recipes.filter(recipe => recipe.name.toLowerCase().includes(query.toLowerCase()));
-
-            if (filteredRecipes.length > 0) {
-                const savedList = JSON.stringify(filteredRecipes);
-                localStorage.setItem('savedRecipes', savedList); // Store the filtered recipes in local storage
-                alert('Recipe list saved!');
-            } else {
-                alert('No recipes to save.');
-            }
-        }
-
-        // Add event listener for the form submission
-        form.addEventListener('submit', handleSubmit);
-
-        // Add event listener for delete buttons
-        recipeList.addEventListener('click', handleDelete);
-
-        // Add event listener for search box
-        searchBox.addEventListener('input', event => {
-            search(event.target.value);
+        recipes.forEach((recipe, index) => {
+          addRecipeToDOM(recipe, index); // Add recipe to DOM
         });
+      }
 
-        // Add event listener for save search button
-        saveSearchBtn.addEventListener('click', saveSearchList);
+      // Function to add a recipe to the DOM (without duplicating it)
+      function addRecipeToDOM(recipe, index) {
+        const li = document.createElement("li");
+        li.innerHTML = `
+        ${recipe.name}
+        <button class="update-button" data-index="${index}">Update</button>
+        <button class="delete-button" data-index="${index}">Delete</button>
+    `;
+        recipeList.appendChild(li);
+      }
 
+      // Function to update a recipe in the DOM after editing
+      function updateRecipeInDOM(recipe, index) {
+        const recipeItems = recipeList.children;
+        const recipeItem = recipeItems[index]; // Find the existing recipe in the list
+
+        // Update the recipe name and buttons in the same list item
+        recipeItem.innerHTML = `
+        ${recipe.name}
+        <button class="update-button" data-index="${index}">Update</button>
+        <button class="delete-button" data-index="${index}">Delete</button>
+    `;
+      }
+
+      // Add or update recipe function
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const nameInput = document.querySelector("#recipe-name");
+        const ingrInput = document.querySelector("#recipe-ingredients");
+        const methodInput = document.querySelector("#recipe-method");
+        const name = nameInput.value.trim();
+        const ingredients = ingrInput.value
+          .trim()
+          .split(",")
+          .map((i) => i.trim());
+        const method = methodInput.value.trim();
+
+        if (name && ingredients.length > 0 && method) {
+          try {
+            if (isEditing) {
+              // Update the existing recipe
+              const response = await fetch(
+                `http://localhost:5000/recipes/${recipes[editingIndex]._id}`,
+                {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ name, ingredients, method }),
+                }
+              );
+
+              const updatedRecipe = await response.json();
+              recipes[editingIndex] = updatedRecipe; // Update the local array
+              updateRecipeInDOM(updatedRecipe, editingIndex); // Update the DOM only for the edited recipe
+
+              // Reset the editing mode
+              isEditing = false;
+              editingIndex = null;
+            } else {
+              // Add a new recipe
+              const response = await fetch("http://localhost:5000/recipes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, ingredients, method }),
+              });
+
+              const newRecipe = await response.json();
+              recipes.push(newRecipe); // Add the new recipe to the local array
+              addRecipeToDOM(newRecipe, recipes.length - 1); // Add the new recipe to the DOM
+            }
+          } catch (error) {
+            console.error("Error adding/updating recipe:", error);
+          }
+
+          // Clear the form input fields after adding/updating the recipe
+          nameInput.value = "";
+          ingrInput.value = "";
+          methodInput.value = "";
+        }
+      }
+
+      // Function to handle the "Update" button click
+      function handleUpdateClick(event) {
+        if (event.target.classList.contains("update-button")) {
+          const index = event.target.dataset.index;
+          const recipe = recipes[index];
+
+          // Pre-fill the form with the existing recipe data
+          document.querySelector("#recipe-name").value = recipe.name;
+          document.querySelector("#recipe-ingredients").value =
+            recipe.ingredients.join(", ");
+          document.querySelector("#recipe-method").value = recipe.method;
+
+          // Set the editing flag and track which recipe is being edited
+          isEditing = true;
+          editingIndex = index;
+        }
+      }
+
+      // Function to handle the "Delete" button click
+      async function handleDelete(event) {
+        if (event.target.classList.contains("delete-button")) {
+          const index = event.target.dataset.index;
+          const recipeId = recipes[index]._id;
+
+          try {
+            await fetch(`http://localhost:5000/recipes/${recipeId}`, {
+              method: "DELETE",
+            });
+
+            recipes.splice(index, 1); // Remove the recipe from the local array
+            displayRecipes(recipes); // Refresh the list without the deleted recipe
+          } catch (error) {
+            console.error("Error deleting recipe:", error);
+          }
+        }
+      }
+
+      // Initial fetch of recipes
+      fetchRecipes();
+
+      // Add event listener for the form submission
+      form.addEventListener("submit", handleSubmit);
+
+      // Add event listener for update and delete buttons
+      recipeList.addEventListener("click", handleUpdateClick);
+      recipeList.addEventListener("click", handleDelete);
+
+      // Add event listener for search box (optional functionality)
+      searchBox.addEventListener("input", (event) => {
+        const query = event.target.value.toLowerCase();
+        const filteredRecipes = recipes.filter((recipe) =>
+          recipe.name.toLowerCase().includes(query)
+        );
+        displayRecipes(filteredRecipes);
+      });
+
+      // Add event listener for save search button (optional functionality)
+      saveSearchBtn.addEventListener("click", () => {
+        const savedRecipes = JSON.stringify(recipes);
+        localStorage.setItem("savedRecipes", savedRecipes);
+        alert("Recipes saved!");
+      });
     </script>
-
-</body>
-
+  </body>
 </html>
